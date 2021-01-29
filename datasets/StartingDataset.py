@@ -18,7 +18,7 @@ class StartingDataset(torch.utils.data.Dataset):
 
 
         # pandas dataframe that stores image names and labels
-        self.df = pd.read_csv('./data/train.csv').iloc[:1000]
+        self.df = pd.read_csv('./data/train.csv').sample(frac=1)
 
         test_section = int(0.8 * len(self.df))
         if train:

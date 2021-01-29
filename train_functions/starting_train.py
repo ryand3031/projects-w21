@@ -93,7 +93,6 @@ def compute_accuracy(outputs, labels):
     n_total = len(outputs)
     return n_correct / n_total
 
-
 def evaluate(val_loader, model, loss_fn, device):
     model.eval()
     correct = 0
@@ -103,7 +102,7 @@ def evaluate(val_loader, model, loss_fn, device):
         input_data, labels = batch
         input_data, labels = input_data.to(device), labels.to(device)
         predictions = model(input_data)
-        total_loss += loss_fn(predictions, labels)
+        total_loss += loss_fn(predictions, labels).item()
         correct += (predictions.argmax(axis=1) == labels).sum().item()
         total += len(labels)
     model.train()
