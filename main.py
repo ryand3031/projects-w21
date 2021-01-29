@@ -7,6 +7,7 @@ import constants
 from datasets.StartingDataset import StartingDataset
 from networks.StartingNetwork import StartingNetwork
 from train_functions.starting_train import starting_train
+import torch
 
 
 SUMMARIES_PATH = "training_summaries"
@@ -24,15 +25,19 @@ def main():
 
     # TODO: Add GPU support. This line of code might be helpful.
     # device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    if not torch.cuda.is_available():
+        device = torch.device("cuda:0")
+    else:
+        device = torch.device("cpu")
 
     print("Summary path:", summary_path)
     print("Epochs:", args.epochs)
     print("Batch size:", args.batch_size)
 
     # Initalize dataset and model. Then train the model!
-    train_dataset = StartingDataset()
-    val_dataset = StartingDataset()
-    model = StartingNetwork()
+    train_dataset = StartingDataset(train=True)
+    val_dataset = StartingDataset(train=False)
+    model = StartingNetwork(3, 5).to(device)
     starting_train(
         train_dataset=train_dataset,
         val_dataset=val_dataset,
@@ -40,6 +45,7 @@ def main():
         hyperparameters=hyperparameters,
         n_eval=args.n_eval,
         summary_path=summary_path,
+        device=device,
     )
 
 

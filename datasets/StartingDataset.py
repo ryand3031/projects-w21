@@ -8,7 +8,7 @@ class StartingDataset(torch.utils.data.Dataset):
     Dataset that contains 3x224x224 images.
     """
 
-    def __init__(self):
+    def __init__(self, train=False):
         self.transformations = transforms.Compose([
             transforms.Resize(255),
             transforms.CenterCrop(224),
@@ -16,8 +16,15 @@ class StartingDataset(torch.utils.data.Dataset):
             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
         ])
 
+
         # pandas dataframe that stores image names and labels
-        self.df = pd.read_csv('./data/train.csv').sample(frac=1)
+        self.df = pd.read_csv('./data/train.csv').iloc[:1000]
+
+        test_section = int(0.8 * len(self.df))
+        if train:
+            self.df = self.df.iloc[:test_section]
+        else:
+            self.df = self.df.iloc[test_section:]
 
     def __getitem__(self, index):
         img = self.df.iloc[index]
@@ -28,3 +35,4 @@ class StartingDataset(torch.utils.data.Dataset):
 
     def __len__(self):
         return len(self.df)
+        
