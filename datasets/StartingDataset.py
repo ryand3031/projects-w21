@@ -8,7 +8,7 @@ class StartingDataset(torch.utils.data.Dataset):
     Dataset that contains 3x224x224 images.
     """
 
-    def __init__(self, train=False):
+    def __init__(self, train=False, seed=1):
         self.transformations = transforms.Compose([
             transforms.Resize(255),
             transforms.CenterCrop(224),
@@ -18,7 +18,7 @@ class StartingDataset(torch.utils.data.Dataset):
 
 
         # pandas dataframe that stores image names and labels
-        self.df = pd.read_csv('./data/train.csv').sample(frac=1)
+        self.df = pd.read_csv('./data/train.csv').sample(frac=1, random_state=seed)
 
         test_section = int(0.8 * len(self.df))
         if train:
