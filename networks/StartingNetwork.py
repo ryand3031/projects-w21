@@ -44,7 +44,8 @@ class StartingNetwork(torch.nn.Module):
         # x = F.relu(self.linear2(x))
         # x = F.relu(self.linear3(x))
 
-        x = self.pretrained_layers(x)
+        with torch.no_grad():
+            x = self.pretrained_layers(x)
         x = torch.reshape(x, (-1, 1280))
         x = F.relu(self.linear1(x))
         x = self.linear2(x)
