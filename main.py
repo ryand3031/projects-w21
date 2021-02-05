@@ -5,7 +5,7 @@ import time
 
 import constants
 from datasets.StartingDataset import StartingDataset
-from networks.StartingNetwork import StartingNetwork
+from networks.ResNextModel import ResNextModel
 from train_functions.starting_train import starting_train
 import torch
 
@@ -35,7 +35,7 @@ def main():
     # Initalize dataset and model. Then train the model!
     train_dataset = StartingDataset(train=True)
     val_dataset = StartingDataset(train=False)
-    model = StartingNetwork(3, 5).to(device)
+    model = ResNextModel(5).to(device)
     starting_train(
         train_dataset=train_dataset,
         val_dataset=val_dataset,
