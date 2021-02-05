@@ -1,7 +1,7 @@
 import argparse
 import os
 import time
-
+from datetime import datetime
 
 import constants
 from datasets.StartingDataset import StartingDataset
@@ -45,6 +45,7 @@ def main():
         summary_path=summary_path,
         device=device,
     )
+    torch.save(model.state_dict(), f'./model-{datetime.now.strftime("%m-%d-%Y_%H-%M-%S")}.pt')
 
 
 def parse_arguments():

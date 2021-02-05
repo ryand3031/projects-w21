@@ -77,6 +77,8 @@ def starting_train(
 
         print()
 
+    print(f"Final Evaluation: {evaluate(val_loader, model, loss_fn, device)}")
+
 
 def compute_accuracy(outputs, labels):
     """
