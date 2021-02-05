@@ -29,7 +29,8 @@ class StartingNetwork(torch.nn.Module):
         # self.linear2 = nn.Linear(200, 100)
         # self.linear3 = nn.Linear(100, 25)
 
-        self.linear1 = nn.Linear(1280, 64)
+        self.fc_in_features = self.pretrained_layers._fc.in_features
+        self.linear1 = nn.Linear(self.fc_in_features, 64)
         self.linear2 = nn.Linear(64, output_dim)
         
 
@@ -46,7 +47,7 @@ class StartingNetwork(torch.nn.Module):
 
         with torch.no_grad():
             x = self.pretrained_layers(x)
-        x = torch.reshape(x, (-1, 1280))
+        x = torch.reshape(x, (-1, self.fc_in_features))
         x = F.relu(self.linear1(x))
         x = self.linear2(x)
         return x
