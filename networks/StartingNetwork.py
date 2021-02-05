@@ -13,7 +13,7 @@ class StartingNetwork(torch.nn.Module):
     def __init__(self, input_channels, output_dim):#5 output classifications
         super().__init__()
 
-        self.pretrained_layers = EfficientNet.from_pretrained('efficientnet-b7', include_top=False)
+        self.pretrained_layers = EfficientNet.from_pretrained('efficientnet-b0', include_top=False)
         # model_children = list(pretrained_model.modules())
         # print(f'children length: {len(model_children)}')
 

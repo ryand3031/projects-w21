@@ -18,7 +18,7 @@ class StartingDataset(torch.utils.data.Dataset):
 
 
         # pandas dataframe that stores image names and labels
-        self.df = pd.read_csv('./data/train.csv').sample(frac=1, random_state=seed)
+        self.df = pd.read_csv('./data/train.csv')#.sample(frac=1, random_state=seed)
 
         test_section = int(0.8 * len(self.df))
         if train:
@@ -35,4 +35,3 @@ class StartingDataset(torch.utils.data.Dataset):
 
     def __len__(self):
         return len(self.df)
-        

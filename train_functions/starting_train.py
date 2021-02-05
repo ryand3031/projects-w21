@@ -53,6 +53,8 @@ def starting_train(
             optimizer.zero_grad()
 
             predictions = model(input_data)
+            if (predictions.shape[0] != labels.shape[0]):
+                print("DEBUG", predictions.shape, labels.shape)
             loss = loss_fn(predictions, labels)
             loss.backward()
             optimizer.step()
@@ -61,9 +63,10 @@ def starting_train(
             # Periodically evaluate our model + log to Tensorboard
             if step % n_eval == 0:
 
-                train_accuracy = compute_accuracy(predictions.argmax(axis = 1), labels)
+                #train_accuracy = compute_accuracy(predictions.argmax(axis = 1), labels)
+                train_loss, train_accuracy = evaluate(train_loader, model, loss_fn, device)
                 writer.add_scalar("train_accuracy", train_accuracy, global_step = step)
-                writer.add_scalar("train_loss", loss, global_step = step)
+                writer.add_scalar("train_loss", train_loss, global_step = step)
 
                 val_loss, val_accuracy = evaluate(val_loader, model, loss_fn, device)
                 writer.add_scalar("val_loss", val_loss, global_step=step)
@@ -76,6 +79,8 @@ def starting_train(
             step += 1
 
         print()
+    
+    print(f"final evaluation: {evaluate(val_loader, model, loss_fn, device)}")
 
 
 def compute_accuracy(outputs, labels):
