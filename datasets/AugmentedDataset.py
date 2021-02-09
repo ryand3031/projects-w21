@@ -22,6 +22,8 @@ class AugmentedDataset(torch.utils.data.Dataset):
             transforms.RandomVerticalFlip(p=0.5)
         ])
 
+        self.train = train
+
 
         # pandas dataframe that stores image names and labels
         self.df = pd.read_csv('./data/train.csv').sample(frac=1, random_state=seed)
@@ -30,7 +32,7 @@ class AugmentedDataset(torch.utils.data.Dataset):
         if train:
             self.df = self.df.iloc[:test_section]
             self.df_transformed = self.df.copy()
-            pd.concat([self.df, self.df_transformed])
+            self.df = pd.concat([self.df, self.df_transformed])
         else:
             self.df = self.df.iloc[test_section:]
 
@@ -38,8 +40,8 @@ class AugmentedDataset(torch.utils.data.Dataset):
         img = self.df.iloc[index]
 
         inputs = Image.open(f"./data/train_images/{img['image_id']}")
-        if index >= self.__len__() / 2:
-            inputs = self.random_transformations(inputs)   
+        if self.train and index >= self.__len__() / 2:
+            inputs = self.random_transformations(inputs)
         inputs = self.transformations(inputs)
 
         return inputs, img['label']
