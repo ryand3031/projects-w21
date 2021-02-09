@@ -4,7 +4,7 @@ import time
 from datetime import datetime
 
 import constants
-from datasets.StartingDataset import StartingDataset
+from datasets.AugmentedDataset import AugmentedDataset
 from networks.ResNextModel import ResNextModel
 from train_functions.starting_train import starting_train
 import torch
@@ -33,8 +33,8 @@ def main():
     print("Batch size:", args.batch_size)
 
     # Initalize dataset and model. Then train the model!
-    train_dataset = StartingDataset(train=True)
-    val_dataset = StartingDataset(train=False)
+    train_dataset = AugmentedDataset(train=True)
+    val_dataset = AugmentedDataset(train=False)
     model = ResNextModel(5).to(device)
     starting_train(
         train_dataset=train_dataset,
