@@ -18,9 +18,10 @@ class ResNextModel(torch.nn.Module):
         for param in self.pretrained_layers.parameters():
             param.requires_grad = False
 
-        self.linear1 = nn.Linear(self.pretrained_layers.fc.in_features, 64)
-        self.linear2 = nn.Linear(64, output_dim)
-        self.fc = nn.Sequential(self.linear1, nn.ReLU(), self.linear2)
+        self.linear1 = nn.Linear(self.pretrained_layers.fc.in_features, 512)
+        self.linear2 = nn.Linear(512, 128)
+        self.linear3 = nn.Linear(128, output_dim)
+        self.fc = nn.Sequential(self.linear1, nn.ReLU(), self.linear2, nn.ReLU(), self.linear3)
         self.pretrained_layers.fc = self.fc
         
 
@@ -33,6 +34,6 @@ class ResNextModel(torch.nn.Module):
             print(module)
 
 if __name__ == '__main__':
-    model = StartingNetwork(3, 1000)
+    model = ResNextModel(5)
     test_input = torch.ones(1, 3, 224, 224)
     model(test_input)
