@@ -35,6 +35,7 @@ class FullEfficientNet(torch.nn.Module):
         
 
     def forward(self, x):
+        x = self.pretrained_layers(x)
         x = torch.reshape(x, (-1, self.fc_in_features))
         x = F.relu(self.linear1(x))
         x = self.linear2(x)
