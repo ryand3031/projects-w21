@@ -10,10 +10,10 @@ class StartingNetwork(torch.nn.Module):
     Basic logistic regression on 224x224x3 images.
     """
 
-    def __init__(self, input_channels, output_dim):#5 output classifications
+    def __init__(self, input_channels, output_dim, model_ver):#5 output classifications
         super().__init__()
 
-        self.pretrained_layers = EfficientNet.from_pretrained('efficientnet-b7', include_top=False)
+        self.pretrained_layers = EfficientNet.from_pretrained(f'efficientnet-b{model_ver}', include_top=False)
         # model_children = list(pretrained_model.modules())
         # print(f'children length: {len(model_children)}')
 
