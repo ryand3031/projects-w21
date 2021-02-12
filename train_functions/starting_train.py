@@ -103,9 +103,11 @@ def evaluate(val_loader, model, loss_fn, device):
     for i, batch in enumerate(val_loader):
         input_data, labels = batch
         input_data, labels = input_data.to(device), labels.to(device)
-        predictions = model(input_data)
-        total_loss += loss_fn(predictions, labels).item()
-        correct += (predictions.argmax(axis=1) == labels).sum().item()
-        total += len(labels)
+        with torch.no_grad():
+            predictions = model(input_data)
+            total_loss += loss_fn(predictions, labels).item()
+            correct += (predictions.argmax(axis=1) == labels).sum().item()
+            total += len(labels)
+            torch.cuda.empty_cache()
     model.train()
     return total_loss / total, correct / total
