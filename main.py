@@ -5,7 +5,7 @@ from datetime import datetime
 
 import constants
 from datasets.AugmentedDataset import AugmentedDataset
-from networks.ResNextModel import ResNextModel
+from networks.FullResNextModel import FullResNextModel
 from train_functions.starting_train import starting_train
 import torch
 
@@ -35,7 +35,7 @@ def main():
     # Initalize dataset and model. Then train the model!
     train_dataset = AugmentedDataset(train=True)
     val_dataset = AugmentedDataset(train=False)
-    model = ResNextModel(5).to(device)
+    model = FullResNextModel(5).to(device)
     starting_train(
         train_dataset=train_dataset,
         val_dataset=val_dataset,
