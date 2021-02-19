@@ -23,6 +23,7 @@ def saving_train(
 
     # Get keyword arguments
     batch_size, epochs = hyperparameters["batch_size"], hyperparameters["epochs"]
+    weight_decay = hyperparameters["weight_decay"]
 
     # Initialize dataloaders
     train_loader = torch.utils.data.DataLoader(
@@ -33,7 +34,7 @@ def saving_train(
     )
 
     # Initalize optimizer (for gradient descent) and loss function
-    optimizer = optim.Adam(model.parameters())
+    optimizer = optim.Adam(model.parameters(), weight_decay=weight_decay)
     loss_fn = nn.CrossEntropyLoss()
 
     # Initialize summary writer (for logging)
