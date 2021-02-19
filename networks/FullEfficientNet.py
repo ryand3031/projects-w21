@@ -5,7 +5,7 @@ import torch.nn.functional as F
 from efficientnet_pytorch import EfficientNet
 
 
-class StartingNetwork(torch.nn.Module):
+class FullEfficientNet(torch.nn.Module):
     """
     Basic logistic regression on 224x224x3 images.
     """
@@ -35,18 +35,7 @@ class StartingNetwork(torch.nn.Module):
         
 
     def forward(self, x):
-        # x = F.relu(self.conv1(x))
-        # x = F.relu(self.conv2(x)) 
-        # x = self.maxPool(x)
-        # x = F.relu(self.conv3(x)) 
-        # x = self.maxPool(x)
-        # x = x.reshape([-1, 14 * 14 * 5])
-        # x = F.relu(self.linear1(x))
-        # x = F.relu(self.linear2(x))
-        # x = F.relu(self.linear3(x))
-
-        with torch.no_grad():
-            x = self.pretrained_layers(x)
+        x = self.pretrained_layers(x)
         x = torch.reshape(x, (-1, self.fc_in_features))
         x = F.relu(self.linear1(x))
         x = self.linear2(x)
@@ -56,8 +45,3 @@ class StartingNetwork(torch.nn.Module):
         modules = list(self.pretrained_layers.modules())
         for module in modules:
             print(module)
-
-if __name__ == '__main__':
-    model = StartingNetwork(3, 1000)
-    test_input = torch.ones(1, 3, 224, 224)
-    model(test_input)
