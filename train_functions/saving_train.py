@@ -3,6 +3,7 @@ import torch.nn as nn
 import torch.optim as optim
 import torch.utils.tensorboard
 from train_functions.starting_train import evaluate, compute_accuracy
+from datetime import datetime
 
 def saving_train(
     train_dataset, val_dataset, model, hyperparameters, n_eval, summary_path, device, save_dir
@@ -75,7 +76,7 @@ def saving_train(
 
             step += 1
         
-        torch.save(model.state_dict(), f'{save_dir}/model-{datetime.now.strftime("%m-%d-%Y_%H-%M-%S")}.pt')
+        torch.save(model.state_dict(), f'{save_dir}/model-{datetime.now().strftime("%m-%d-%Y_%H-%M-%S")}.pt')
         print()
 
     print(f"Final Evaluation: {evaluate(val_loader, model, loss_fn, device)}")
