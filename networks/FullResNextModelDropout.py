@@ -21,7 +21,7 @@ class FullResNextModelDropout(torch.nn.Module):
         self.linear1 = nn.Linear(self.pretrained_layers.fc.in_features, 512)
         self.linear2 = nn.Linear(512, 128)
         self.linear3 = nn.Linear(128, output_dim)
-        self.fc = nn.Sequential(self.linear1, nn.Dropout(), nn.ReLU(), self.linear2, nn.Droupout(), nn.ReLU(), self.linear3)
+        self.fc = nn.Sequential(self.linear1, nn.Dropout(), nn.ReLU(), self.linear2, nn.Dropout(), nn.ReLU(), self.linear3)
         self.pretrained_layers.fc = self.fc
         
 
@@ -34,6 +34,6 @@ class FullResNextModelDropout(torch.nn.Module):
             print(module)
 
 if __name__ == '__main__':
-    model = FullResNextModel(5)
+    model = FullResNextModelDropout(5)
     test_input = torch.ones(1, 3, 224, 224)
     model(test_input)
