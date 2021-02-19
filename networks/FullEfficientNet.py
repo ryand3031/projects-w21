@@ -13,6 +13,8 @@ class FullEfficientNet(torch.nn.Module):
     def __init__(self, input_channels, output_dim, model_ver):#5 output classifications
         super().__init__()
 
+        self.downsize = nn.Conv2d(3, 3, 2, stride=2)
+        self.pool = nn.MaxPool2d(1)
         self.pretrained_layers = EfficientNet.from_pretrained(f'efficientnet-b{model_ver}', include_top=False)
         # model_children = list(pretrained_model.modules())
         # print(f'children length: {len(model_children)}')
@@ -35,6 +37,7 @@ class FullEfficientNet(torch.nn.Module):
         
 
     def forward(self, x):
+        x = self.pool(F.relu(self.downsize(x)))
         x = self.pretrained_layers(x)
         x = torch.reshape(x, (-1, self.fc_in_features))
         x = F.relu(self.linear1(x))
