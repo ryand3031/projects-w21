@@ -5,7 +5,7 @@ import torch.nn.functional as F
 from efficientnet_pytorch import EfficientNet
 
 
-class FullEfficientNet(torch.nn.Module):
+class FullEfficientNetDropout(torch.nn.Module):
     """
     Basic logistic regression on 224x224x3 images.
     """

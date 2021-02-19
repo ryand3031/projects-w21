@@ -5,7 +5,7 @@ import torchvision
 
 
 
-class FullResNextModel(torch.nn.Module):
+class FullResNextModelDropout(torch.nn.Module):
     """
     Based off of resnext
     """
