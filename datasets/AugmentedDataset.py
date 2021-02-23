@@ -21,7 +21,8 @@ class AugmentedDataset(torch.utils.data.Dataset):
             transforms.RandomHorizontalFlip(p=0.5),
             transforms.RandomVerticalFlip(p=0.5),
             transforms.GaussianBlur(11, sigma=(0.1, 2.0)),
-            torch.nn.Dropout2d(0.1)
+            torch.nn.Dropout2d(0.1),
+            transforms.RandomErasing(p=0.25)
         ])
 
         self.train = train
