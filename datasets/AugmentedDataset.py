@@ -8,10 +8,10 @@ class AugmentedDataset(torch.utils.data.Dataset):
     Dataset that contains 3x224x224 images.
     """
 
-    def __init__(self, train=False, seed=1):
+    def __init__(self, train=False, seed=1, resize=510, centerCrop=448):
         self.transformations = transforms.Compose([
-            transforms.Resize(510),
-            transforms.CenterCrop(448),
+            transforms.Resize(resize),
+            transforms.CenterCrop(centerCrop),
             transforms.ToTensor(),
             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
         ])
