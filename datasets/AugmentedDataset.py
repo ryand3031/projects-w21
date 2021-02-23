@@ -8,10 +8,10 @@ class AugmentedDataset(torch.utils.data.Dataset):
     Dataset that contains 3x224x224 images.
     """
 
-    def __init__(self, train=False, seed=1):
+    def __init__(self, train=False, seed=1, resize=510, centerCrop=448):
         self.transformations = transforms.Compose([
-            transforms.Resize(255),
-            transforms.CenterCrop(224),
+            transforms.Resize(resize),
+            transforms.CenterCrop(centerCrop),
             transforms.ToTensor(),
             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
         ])
@@ -19,7 +19,10 @@ class AugmentedDataset(torch.utils.data.Dataset):
         self.random_transformations = transforms.Compose([
             transforms.RandomRotation(90, expand=False, fill=None),
             transforms.RandomHorizontalFlip(p=0.5),
-            transforms.RandomVerticalFlip(p=0.5)
+            transforms.RandomVerticalFlip(p=0.5),
+            transforms.GaussianBlur(11, sigma=(0.1, 2.0)),
+            torch.nn.Dropout2d(0.1),
+            transforms.RandomErasing(p=0.25)
         ])
 
         self.train = train
@@ -40,9 +43,9 @@ class AugmentedDataset(torch.utils.data.Dataset):
         img = self.df.iloc[index]
 
         inputs = Image.open(f"./data/train_images/{img['image_id']}")
+        inputs = self.transformations(inputs)
         if self.train and index >= self.__len__() / 2:
             inputs = self.random_transformations(inputs)
-        inputs = self.transformations(inputs)
 
         return inputs, img['label']
 

@@ -13,10 +13,13 @@ class FullResNextModel(torch.nn.Module):
     def __init__(self, output_dim):#5 output classifications
         super().__init__()
 
+        self.downsize = nn.Conv2d(3, 3, 2, stride=2)
+        self.pool = nn.MaxPool2d(1)
+
         self.pretrained_layers = torchvision.models.resnext101_32x8d(pretrained=True, progress=True)
 
-        # for param in self.pretrained_layers.parameters():
-        #     param.requires_grad = False
+        for param in self.pretrained_layers.parameters():
+            param.requires_grad = False
 
         self.linear1 = nn.Linear(self.pretrained_layers.fc.in_features, 512)
         self.linear2 = nn.Linear(512, 128)
@@ -26,6 +29,7 @@ class FullResNextModel(torch.nn.Module):
         
 
     def forward(self, x):
+        x = self.pool(F.relu(self.downsize(x)))
         return self.pretrained_layers(x)
 
     def print_pretrained(self):
