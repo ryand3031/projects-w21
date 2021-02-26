@@ -24,7 +24,7 @@ class FullEfficientNetDropout(torch.nn.Module):
         self.dropout1 = nn.Dropout()
         self.linear2 = nn.Linear(200, 100)
         self.dropout2 = nn.Dropout()
-        self.linear3 = nn.Linear(200, output_dim)
+        self.linear3 = nn.Linear(100, output_dim)
         
 
     def forward(self, x):
