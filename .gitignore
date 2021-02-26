@@ -2,3 +2,6 @@ __pycache__
 .vscode
 
 training_summaries
+/data
+tests.ipynb
+pytorch_workshop.ipynb

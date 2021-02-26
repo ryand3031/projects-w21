@@ -6,9 +6,6 @@ from efficientnet_pytorch import EfficientNet
 
 
 class FullEfficientNet(torch.nn.Module):
-    """
-    Basic logistic regression on 224x224x3 images.
-    """
 
     def __init__(self, input_channels, output_dim, model_ver):#5 output classifications
         super().__init__()
