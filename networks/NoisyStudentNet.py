@@ -10,7 +10,7 @@ class NoisyStudentNet(torch.nn.Module):
     def __init__(self, output_dim, model_ver, dropout=True, fine_tune=True):#5 output classifications
         super().__init__()
         
-        self.pretrained_layers = torch.hub.load('rwightman/gen-efficientnet-pytorch', 'tf_efficientnet_b{model_ver}_ns', pretrained=True)
+        self.pretrained_layers = torch.hub.load('rwightman/gen-efficientnet-pytorch', f'tf_efficientnet_b{model_ver}_ns', pretrained=True, force_reload=True)
 
         if not fine_tune:
             for param in self.pretrained_layers.parameters():
