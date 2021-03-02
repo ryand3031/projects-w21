@@ -2,10 +2,13 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 import torch.utils.tensorboard
+import torchvision.transforms as transforms
+
+import ttach as tta
 
 
 def starting_train(
-    train_dataset, val_dataset, model, hyperparameters, n_eval, summary_path, device
+    train_dataset, val_dataset, model, hyperparameters, n_eval, summary_path, device, use_tta=False
 ):
     """
     Trains and evaluates a model.
@@ -65,7 +68,7 @@ def starting_train(
                 writer.add_scalar("train_accuracy", train_accuracy, global_step = step)
                 writer.add_scalar("train_loss", loss, global_step = step)
 
-                val_loss, val_accuracy = evaluate(val_loader, model, loss_fn, device)
+                val_loss, val_accuracy = evaluate(val_loader, model, loss_fn, device, use_tta)
                 writer.add_scalar("val_loss", val_loss, global_step=step)
                 writer.add_scalar("val_accuracy", val_accuracy, global_step=step)
                 
@@ -77,7 +80,7 @@ def starting_train(
 
         print()
 
-    print(f"Final Evaluation: {evaluate(val_loader, model, loss_fn, device)}")
+    print(f"Final Evaluation: {evaluate(val_loader, model, loss_fn, device, use_tta)}")
 
 
 def compute_accuracy(outputs, labels):
@@ -95,8 +98,22 @@ def compute_accuracy(outputs, labels):
     n_total = len(outputs)
     return n_correct / n_total
 
-def evaluate(val_loader, model, loss_fn, device):
+def evaluate(val_loader, model, loss_fn, device, use_tta=False):
     model.eval()
+
+    if use_tta:
+        transformations = transforms.Compose([
+                tta.Rotate90(angles=[0, 90, 180, 270]),
+                tta.hflip_transform(),
+                tta.vflip_transform(),
+                tta.d4_transform(),
+                tta.flip_transform(),
+                transforms.GaussianBlur(11, sigma=(0.1, 2.0)),
+                transforms.RandomErasing(p=1)
+            ])
+
+        tta_model = tta.classificationTTAWrapper(model, transformations)
+    
     correct = 0
     total = 0
     total_loss = 0
@@ -104,10 +121,14 @@ def evaluate(val_loader, model, loss_fn, device):
         input_data, labels = batch
         input_data, labels = input_data.to(device), labels.to(device)
         with torch.no_grad():
-            predictions = model(input_data)
+            if use_tta:
+                predictions = tta_model(input_data)
+            else:
+                predictions = model(input_data)
             total_loss += loss_fn(predictions, labels).item()
             correct += (predictions.argmax(axis=1) == labels).sum().item()
             total += len(labels)
             torch.cuda.empty_cache()
+    
     model.train()
     return total_loss / total, correct / total

@@ -6,7 +6,7 @@ from train_functions.starting_train import evaluate, compute_accuracy
 from datetime import datetime
 
 def saving_train(
-    train_dataset, val_dataset, model, hyperparameters, n_eval, summary_path, device, save_dir
+    train_dataset, val_dataset, model, hyperparameters, n_eval, summary_path, device, save_dir, use_tta=False
 ):
     """
     Trains and evaluates a model.
@@ -67,7 +67,7 @@ def saving_train(
                 writer.add_scalar("train_accuracy", train_accuracy, global_step = step)
                 writer.add_scalar("train_loss", loss, global_step = step)
 
-                val_loss, val_accuracy = evaluate(val_loader, model, loss_fn, device)
+                val_loss, val_accuracy = evaluate(val_loader, model, loss_fn, device, use_tta)
                 writer.add_scalar("val_loss", val_loss, global_step=step)
                 writer.add_scalar("val_accuracy", val_accuracy, global_step=step)
                 
@@ -80,4 +80,4 @@ def saving_train(
         torch.save(model.state_dict(), f'{save_dir}/model-{datetime.now().strftime("%m-%d-%Y_%H-%M-%S")}.pt')
         print()
 
-    print(f"Final Evaluation: {evaluate(val_loader, model, loss_fn, device)}")
+    print(f"Final Evaluation: {evaluate(val_loader, model, loss_fn, device, use_tta)}")
