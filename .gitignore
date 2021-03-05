@@ -5,3 +5,4 @@ training_summaries
 /data
 tests.ipynb
 pytorch_workshop.ipynb
+/trained_models

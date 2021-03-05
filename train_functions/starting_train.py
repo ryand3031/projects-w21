@@ -114,6 +114,7 @@ def evaluate(val_loader, model, loss_fn, device, use_tta=False):
     total = 0
     total_loss = 0
     for i, batch in enumerate(val_loader):
+        print(f"\rIteration: {i + 1} of {len(val_loader)}", end="")
         input_data, labels = batch
         input_data, labels = input_data.to(device), labels.to(device)
         with torch.no_grad():
