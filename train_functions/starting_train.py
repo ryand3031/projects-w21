@@ -102,16 +102,12 @@ def evaluate(val_loader, model, loss_fn, device, use_tta=False):
     model.eval()
 
     if use_tta:
-        transformations = transforms.Compose([
+        transformations = tta.Compose([
                 tta.Rotate90(angles=[0, 90, 180, 270]),
-                tta.hflip_transform(),
-                tta.vflip_transform(),
-                tta.d4_transform(),
-                tta.flip_transform(),
-                transforms.GaussianBlur(11, sigma=(0.1, 2.0)),
-                transforms.RandomErasing(p=1)
+                tta.HorizontalFlip(),
+                tta.VerticalFlip()
             ])
-
+    
         tta_model = tta.classificationTTAWrapper(model, transformations)
     
     correct = 0
