@@ -108,7 +108,7 @@ def evaluate(val_loader, model, loss_fn, device, use_tta=False):
                 tta.VerticalFlip()
             ])
     
-        tta_model = tta.classificationTTAWrapper(model, transformations)
+        tta_model = tta.ClassificationTTAWrapper(model, transformations)
     
     correct = 0
     total = 0
